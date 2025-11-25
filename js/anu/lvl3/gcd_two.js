@@ -1,0 +1,3 @@
+function gcd_two(){
+    
+}
