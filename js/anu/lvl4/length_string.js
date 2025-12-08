@@ -9,3 +9,5 @@ function length_string(str){
 }
 length_string("hello");
 length_string("Javascript");
+
+length_string("Name");

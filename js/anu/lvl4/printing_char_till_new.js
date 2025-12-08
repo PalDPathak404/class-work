@@ -1,7 +1,12 @@
 function printing_char_till_new(str){
-    let bag="";
-    for(let i =0;i<str.length;i++){
-        bag = bag + i + " ";
+    let result = "";
+    for(let i = 0; i < str.length; i++){
+        result += str[i];
+        if(i < str.length - 1){
+            result += "  ";
+        }
     }
-    console.log(bag);
+    console.log(result);
 }
+printing_char_till_new("cat");
+printing_char_till_new("hi");
