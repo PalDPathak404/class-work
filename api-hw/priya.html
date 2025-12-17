@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Api</title>
+   <style>
+    
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px; 
+    color: #fff;
+    overflow-x: hidden;
+}
+.navs {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    
+    
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 1px solid rgba(255, 255, 255, 0.3); 
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+}
+
+.weather {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+
+.boths {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    justify-content: flex-end; 
+    max-width: 400px;
+}
+
+.text {
+    /* Input */
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    border: none;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2); 
+}
+
+.text:focus {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); 
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: none;
+    background: linear-gradient(145deg, #00c6ff, #0072ff);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.3), 
+                -1px -1px 2px rgba(255,255,255,0.3);
+    transition: transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.95); 
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
+}
+.weather-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 25px;
+    
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 10px 20px 40px rgba(0, 0, 0, 0.4);
+
+    width: 100%;
+    max-width: 360px; 
+    padding: 20px; 
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+.header { margin-bottom: 15px; }
+
+.header .city {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.header .country {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #ccc;
+    letter-spacing: 1px;
+}
+
+.header .date {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+}
+
+
+.main-weather {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0 20px 0;
+}
+
+.main-weather .icon {
+    width: 80px;
+    height: 80px;
+
+    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.main-weather .temp {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin: 5px 0;
+    background: -webkit-linear-gradient(#fff, #b3e0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.main-weather .condition {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+}
+
+
+.details {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 5px;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.details .label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.details .value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 600px) {
+    .navs {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+        border-radius: 15px;
+    }
+    
+    .boths {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .weather-card {
+        padding: 15px;
+    }
+    
+    .main-weather .temp {
+        font-size: 3rem;
+    }
+    
+    .details .value {
+        font-size: 0.85rem;
+    }
+}
+   </style>
+</head>
+<body>
+    <div class="navs">
+<h3 class="weather">Wheather Api</h3>
+<div class="boths">
+<input type="text" placeholder="Search a Location" class="text">
+<button type="button" class="btn">Search</button></div>
+</div>
+
+  <div class="weather-card">
+        <div class="header">
+            <h2 class="city">Loading...</h2>
+                <h2 class="country">Country Loading...</h2>
+            <p class="date">--/--/----</p>
+        </div>
+
+        <div class="main-weather">
+            <img src="" alt="Weather Icon" class="icon">
+            <h1 class="temp">--°C</h1>
+            <p class="condition">--</p>
+        </div>
+
+        <div class="details">
+            <div class="col">
+                <span class="label">Humidity</span>
+                <span class="value humidity">--%</span>
+            </div>
+            <div class="col">
+                <span class="label">Wind</span>
+                <span class="value wind">-- kph</span>
+            </div>
+        </div>
+         <div class="details">
+            <div class="col">
+                <span class="label">Latitude</span>
+                <span class="value lat"></span>
+            </div>
+            <div class="col">
+                <span class="label">Longitude</span>
+                <span class="value lon"></span>
+            </div>
+        </div>
+         <div class="details">
+            <div class="col">
+                <span class="label">cloud</span>
+                <span class="value cloud"></span>
+            </div>
+            <div class="col">
+                <span class="label">tz_id</span>
+                <span class="value tz_id">tz_id</span>
+            </div>
+        </div>
+         <div class="details">
+            <div class="col">
+                <span class="label">wind_degree</span>
+                <span class="value wind_degree"></span>
+            </div>
+            <div class="col">
+                <span class="label">wind_mph</span>
+                <span class="value wind_mph">-- mph</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        let searchInput = document.querySelector('.text');
+let btn = document.querySelector('.btn');
+let city = document.querySelector('.city');
+let country = document.querySelector('.country');
+let date = document.querySelector('.date');
+let temp = document.querySelector('.temp');
+let condition = document.querySelector('.condition');
+let humidity = document.querySelector('.humidity');
+let wind = document.querySelector('.wind');
+let icon = document.querySelector('.icon');
+let lat = document.querySelector('.lat');
+let lon = document.querySelector('.lon');
+let cloud = document.querySelector('.cloud');
+let tz_id = document.querySelector('.tz_id');
+let wind_degree = document.querySelector('.wind_degree');
+let wind_mph = document.querySelector('.wind_mph');
+
+
+function inputTake(data){
+  city.textContent = data.location.name;
+  country.textContent = data.location.country;
+  date.textContent = data.location.localtime;
+  icon.src = "https:" + data.current.condition.icon;
+  temp.textContent = data.current.temp_c + "°C";
+  condition.textContent = data.current.condition.text;
+  humidity.textContent = data.current.humidity + "%";
+  wind.textContent = data.current.wind_kph + " kph";
+  lat.textContent = data.location.lat;
+  lon.textContent = data.location.lon;
+  cloud.textContent = data.current.cloud;
+  tz_id.textContent = data.location.tz_id;
+  wind_degree.textContent = data.current.wind_degree + "°C";
+  wind_mph.textContent = data.current.wind_mph + " mph";
+
+
+}
+
+function loadApi(){
+    let cityQuery = searchInput.value;
+    fetch(`https://api.weatherapi.com/v1/current.json?key=a4c5a28b854646f086d63906250912&q=${cityQuery}&aqi=no`)
+    .then((response) => response.json())
+    .then((data) =>{
+      inputTake(data);
+      searchInput.value = "";
+    })
+    .catch((error) =>{
+console.log(error)
+alert("City not found or API error");
+})
+}
+btn.addEventListener('click',loadApi);
+    </script>
+</body>
+</html>
